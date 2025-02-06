@@ -17,37 +17,93 @@
             height: 100vh;
             text-align: left;
             padding: 20px;
+            overflow: hidden;
+        }
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: black;
         }
         .terminal-box {
             border: 2px solid #00ff00;
             padding: 20px;
             width: 80%;
             max-width: 700px;
+            height: 400px;
             background: rgba(0, 0, 0, 0.9);
             box-shadow: 0px 0px 15px #00ff00;
             border-radius: 5px;
             font-size: 1.2em;
             overflow: hidden;
             white-space: pre-line;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
         .output {
             font-family: monospace;
             line-height: 1.4em;
-            animation: typing 6s steps(50, end);
             overflow: hidden;
+            flex-grow: 1;
         }
         @keyframes typing {
             from { width: 0; }
             to { width: 100%; }
         }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .final-message {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff00;
+            animation: flicker 1.2s infinite alternate;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
     </style>
 </head>
 <body>
+    <canvas class="matrix" id="matrix"></canvas>
     <div class="terminal-box">
         <div class="output" id="terminal"></div>
     </div>
 
     <script>
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = "0123456789ABCDEF".split("");
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff00";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
         const terminalOutput = `
 user@system:~$ whoami
 user
@@ -59,8 +115,7 @@ user@system:~$ sudo /bin/bash
 root@system:/root# ls
 flag.txt
 root@system:/root# cat flag.txt
-Welcome to CyberUNIT
-        `;
+`;
 
         let index = 0;
         function typeEffect() {
@@ -68,6 +123,10 @@ Welcome to CyberUNIT
                 document.getElementById("terminal").innerHTML += terminalOutput.charAt(index);
                 index++;
                 setTimeout(typeEffect, 50);
+            } else {
+                setTimeout(() => {
+                    document.querySelector(".terminal-box").innerHTML = '<div class="final-message">Welcome to CyberUNIT</div>';
+                }, 500);
             }
         }
         typeEffect();
