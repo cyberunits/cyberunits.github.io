@@ -45,6 +45,7 @@
             font-size: 1.5em;
             position: relative;
             overflow: hidden;
+            line-height: 1.6;
         }
 
         .final-message {
@@ -87,20 +88,15 @@
 
     <script>
         const commands = [
-            { text: 'user@system:~$ ', prompt: true },
-            { text: 'whoami\n', delay: 100 },
+            { text: 'user@system:~$ whoami\n', delay: 100 },
             { text: 'user\n\n', delay: 500 },
-            { text: 'user@system:~$ ', prompt: true },
-            { text: 'sudo -l\n', delay: 100 },
+            { text: 'user@system:~$ sudo -l\n', delay: 100 },
             { text: 'Matching Defaults entries for user on system:\n    (ALL) NOPASSWD: /bin/bash\n\n', delay: 50 },
-            { text: 'user@system:~$ ', prompt: true },
-            { text: 'sudo /bin/bash\n\n', delay: 100 },
-            { text: 'root@system:~# ', prompt: true },
-            { text: 'ls\n', delay: 100 },
+            { text: 'user@system:~$ sudo /bin/bash\n\n', delay: 100 },
+            { text: 'root@system:~# ls\n', delay: 100 },
             { text: 'flag.txt\n\n', delay: 300 },
-            { text: 'root@system:~# ', prompt: true },
-            { text: 'cat flag.txt\n', delay: 100 },
-            { text: '\nCyberUNIT{PrIvIlEgE_EsCaLaTiOn_aTtAcK_SuCcEsSfUlLy_dOnE}\n\n', delay: 50 },
+            { text: 'root@system:~# cat flag.txt\n', delay: 100 },
+            { text: 'CyberUNIT{PrIvIlEgE_EsCaLaTiOn_aTtAcK_SuCcEsSfUlLy_dOnE}\n\n\n', delay: 50 },
             { text: '', delay: 3000 }
         ];
 
@@ -111,8 +107,6 @@
             if (currentCommand < commands.length) {
                 const cmd = commands[currentCommand];
                 const elem = document.createElement('div');
-                
-                if (cmd.prompt) elem.className = 'prompt';
                 
                 terminal.appendChild(elem);
                 let charIndex = 0;
