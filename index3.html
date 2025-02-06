@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberCore Interface</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+
+        :root {
+            --neon-blue: #00f3ff;
+            --dark-bg: #0a0a12;
+        }
+
+        body {
+            background: var(--dark-bg);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Ubuntu Mono', monospace;
+            overflow: hidden;
+        }
+
+        .cyber-frame {
+            width: 800px;
+            height: 500px;
+            background: rgba(10, 10, 20, 0.95);
+            border: 3px solid var(--neon-blue);
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
+        }
+
+        .cyber-header {
+            padding: 15px;
+            background: linear-gradient(90deg, #000428 0%, #004e92 100%);
+            border-bottom: 2px solid var(--neon-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-text {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            letter-spacing: 2px;
+        }
+
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 243, 255, 0.1);
+            animation: scan 4s linear infinite;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            height: calc(100% - 60px);
+            color: var(--neon-blue);
+            font-size: 1.2em;
+            position: relative;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .prompt {
+            color: #00ff88;
+            margin-right: 10px;
+        }
+
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .final-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .cyber-title {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: textGlow 2s infinite alternate;
+        }
+
+        .discord-btn {
+            color: var(--neon-blue);
+            text-decoration: none;
+            border: 2px solid var(--neon-blue);
+            padding: 10px 30px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discord-btn:hover {
+            background: var(--neon-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 10px var(--neon-blue); }
+            to { text-shadow: 0 0 20px var(--neon-blue); }
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-frame">
+        <div class="cyber-header">
+            <div class="header-text">CYBERCORE v2.3.1</div>
+            <div class="header-text">STATUS: [CONNECTED]</div>
+        </div>
+        <div class="scan-line"></div>
+        <div class="terminal-body" id="terminal">
+            <div class="matrix-bg" id="matrix"></div>
+        </div>
+    </div>
+
+    <script>
+        const commands = [
+            { text: 'user@system:~$ whoami\n', delay: 100 },
+            { text: 'user\n\n', delay: 500 },
+            { text: 'user@system:~$ sudo -l\n', delay: 100 },
+            { text: 'Matching Defaults entries for user:\n    (ALL) NOPASSWD: /bin/bash\n\n', delay: 50 },
+            { text: 'user@system:~$ sudo /bin/bash\n\n', delay: 100 },
+            { text: 'root@system:~# ls\n', delay: 100 },
+            { text: 'flag.txt\n\n', delay: 300 },
+            { text: 'root@system:~# cat flag.txt\n', delay: 100 },
+            { text: 'CyberUNIT{PrIvIlEgE_EsCaLaTiOn_aTtAcK_SuCcEsSfUlLy_dOnE}\n\n', delay: 50 },
+            { text: '', delay: 3000 }
+        ];
+
+        const terminal = document.getElementById('terminal');
+        let currentCommand = 0;
+
+        function typeCommand() {
+            if (currentCommand < commands.length) {
+                const cmd = commands[currentCommand];
+                const elem = document.createElement('div');
+                elem.className = 'glow';
+                terminal.appendChild(elem);
+                
+                let charIndex = 0;
+                const typeChar = () => {
+                    if (charIndex < cmd.text.length) {
+                        elem.textContent += cmd.text[charIndex];
+                        charIndex++;
+                        setTimeout(typeChar, 30);
+                    } else {
+                        currentCommand++;
+                        setTimeout(typeCommand, cmd.delay || 100);
+                    }
+                };
+                typeChar();
+            } else {
+                terminal.innerHTML = `
+                    <div class="final-screen">
+                        <div class="cyber-title">CyberUNIT</div>
+                        <a href="https://discord.gg/gY54v72H" class="discord-btn" target="_blank">
+                            ACCESS DISCORD CHANNEL
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        // Create matrix background
+        function createMatrix() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+            const matrix = document.getElementById('matrix');
+            const columns = Math.floor(window.innerWidth / 20);
+            
+            for(let i = 0; i < columns; i++) {
+                const div = document.createElement('div');
+                div.style.position = 'absolute';
+                div.style.left = `${(i * 20)}px`;
+                div.style.animation = `matrixFlow ${Math.random() * 5 + 3}s linear infinite`;
+                div.textContent = chars[Math.floor(Math.random() * chars.length)];
+                matrix.appendChild(div);
+            }
+        }
+
+        setTimeout(typeCommand, 1000);
+        createMatrix();
+    </script>
+</body>
+</html>
