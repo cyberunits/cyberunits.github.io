@@ -69,6 +69,16 @@
             justify-content: center;
             align-items: center;
             flex-grow: 1;
+            flex-direction: column;
+        }
+        .discord-link {
+            font-size: 0.5em;
+            margin-top: 10px;
+        }
+        .discord-link a {
+            color: #00ff00;
+            text-decoration: none;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -125,8 +135,8 @@ root@system:/root# cat flag.txt
                 setTimeout(typeEffect, 50);
             } else {
                 setTimeout(() => {
-                    document.querySelector(".terminal-box").innerHTML = '<div class="final-message">Welcome to CyberUNIT</div>';
-                }, 500);
+                    document.querySelector(".terminal-box").innerHTML = '<div class="final-message">Welcome to CyberUNIT <div class="discord-link"><a href="https://discord.gg/gY54v72H" target="_blank">[ Join our Discord ]</a></div></div>';
+                }, 250);
             }
         }
         typeEffect();
