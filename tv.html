@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>4-TV Multiview</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: black;
+        }
+        .video-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: 100vw;
+            height: 100vh;
+            gap: 2px;
+        }
+        .video-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/TwDlQ71TNmk?autoplay=1&mute=1" allow="autoplay"></iframe>
+        </div>
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/bNyUyrR0PHo?autoplay=1&mute=1" allow="autoplay"></iframe>
+        </div>
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/oY976rzO-EI?autoplay=1&mute=1" allow="autoplay"></iframe>
+        </div>
+        <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/z_QLS5IBmDU?autoplay=1&mute=1" allow="autoplay"></iframe>
+        </div>
+    </div>
+</body>
+</html>
